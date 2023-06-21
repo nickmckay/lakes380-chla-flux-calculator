@@ -29,7 +29,7 @@ names(xl_chron) <- xl_chron_head
 
 chronDepths <- xl_chron$ShCal20_t #chronology Year AD column here
 
-agesOnHsiDepths <- Hmisc::approxExtrap(x = xl_chron$`z (dblf)`, #chronology depth column here
+agesOnHsiDepths <- Hmisc::approxExtrap(x = xl_chron$`z (dblf)`*10, #chronology depth column here
                                        y = 1950-xl_chron$ShCal20_t, #chronology Year AD column here
                                        xout = depth_mid)$y
 
@@ -41,7 +41,7 @@ op <- estimate_chla_flux(depth = depth_mid,
                          rabd660670 = RABD660670$y,
                          smooth = TRUE)
 
-op_plot <- plot_flux(op) + ggtitle("Oporoa from excel") + xlim(c(0,2020))
+op_plot <- plot_flux(op) + ggtitle("Oporoa from excel")
 
 op_data <- chla_flux_to_tibble(op)
 write_csv(x = op_data,file.path(output_folder,"OporoaData.csv"))
