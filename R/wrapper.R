@@ -2,6 +2,7 @@
 #'
 #' @param ts a lipd-ts-tibble object, or somethign that can be converted to one.
 #' @inheritParams estimate_sed_rate_from_median
+#' @import lipdR
 #'
 #' @return a tibble with output data
 #' @export
