@@ -6,16 +6,33 @@
 #' @export
 #' @import magrittr
 plot_flux <- function(tib){
-  long <- chla_flux_to_tibble(tib) %>%
-    tidyr::pivot_longer(cols = -time,names_to = "variable")
+
+  if(all(is.na(tib$time))){#plot on depth
+    long <- chla_flux_to_tibble(tib) %>%
+      tidyr::pivot_longer(cols = -c("depth","time"),names_to = "variable")
 
 
   fluxPlot <- ggplot2::ggplot(long) +
-    ggplot2::geom_line(ggplot2::aes(x = time, y = value)) +
+    ggplot2::geom_line(ggplot2::aes(x = depth, y = value)) +
     ggplot2::facet_grid(factor(variable,levels = c("chla_flux","chla_conc","sed_rate","dbd")) ~ .,scales = "free_y",switch = "both") +
     ggplot2::theme_bw() +
-    ggplot2::xlab("Year AD") +
+    ggplot2::xlab("Depth (mm)") +
     ggplot2::ylab("")
+
+  }else{
+    long <- chla_flux_to_tibble(tib) %>%
+      tidyr::pivot_longer(cols = -time,names_to = "variable")
+
+
+
+    fluxPlot <- ggplot2::ggplot(long) +
+      ggplot2::geom_line(ggplot2::aes(x = time, y = value)) +
+      ggplot2::facet_grid(factor(variable,levels = c("chla_flux","chla_conc","sed_rate","dbd")) ~ .,scales = "free_y",switch = "both") +
+      ggplot2::theme_bw() +
+      ggplot2::xlab("Year AD") +
+      ggplot2::ylab("")
+
+  }
 
   return(fluxPlot)
 

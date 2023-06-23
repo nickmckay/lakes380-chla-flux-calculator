@@ -1,6 +1,9 @@
 library(readxl)
 library(ggplot2)
 library(readr)
+library(Lakes380ChlaFluxCalculator)
+
+
 input_file <- "~/Downloads/POROA_LC4U_Data.xlsx"
 output_folder <- "~/Downloads"
 
@@ -29,7 +32,7 @@ names(xl_chron) <- xl_chron_head
 
 chronDepths <- xl_chron$ShCal20_t #chronology Year AD column here
 
-agesOnHsiDepths <- Hmisc::approxExtrap(x = xl_chron$`z (dblf)`*10, #chronology depth column here
+agesOnHsiDepths <- Hmisc::approxExtrap(x = xl_chron$`z (dblf)`*10, #chronology depth column here (adjusted by 10 for mm)
                                        y = 1950-xl_chron$ShCal20_t, #chronology Year AD column here
                                        xout = depth_mid)$y
 
@@ -46,5 +49,23 @@ op_plot <- plot_flux(op) + ggtitle("Oporoa from excel")
 op_data <- chla_flux_to_tibble(op)
 write_csv(x = op_data,file.path(output_folder,"OporoaData.csv"))
 
-
 ggsave(op_plot,filename = file.path(output_folder,"OporoaFluxPlot.pdf"))
+
+
+# Calibrate only if there's no age model -----------------------------------
+
+
+#if time is excluded (or set to NA) then it should still work
+op_notime <- estimate_chla_flux(depth = depth_mid,
+                         rabd660670 = RABD660670$y,
+                         smooth = TRUE)
+
+op_plot_notime <- plot_flux(op_notime) + ggtitle("Oporoa from excel, no time")
+
+op_data_notime <- chla_flux_to_tibble(op_notime)
+write_csv(x = op_data_notime,file.path(output_folder,"OporoaData_notime.csv"))
+
+ggsave(op_plot_notime,filename = file.path(output_folder,"OporoaFluxPlot_notime.pdf"))
+
+
+

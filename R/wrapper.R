@@ -36,7 +36,7 @@ estimate_chla_flux_lipd <- function(ts,smooth = TRUE){
 #' @return a tibble with output data
 #' @export
 #'
-estimate_chla_flux <- function(depth, time, rabd660670, geoClass, smooth = TRUE){
+estimate_chla_flux <- function(depth, time = NA, rabd660670, geoClass, smooth = TRUE){
   #calculate sub-components
   chla_conc <- calibrate_rabd660670(rabd660670,geoClass)
   sed_rate <- estimate_sed_rate_from_median(time,depth,smooth = smooth)
