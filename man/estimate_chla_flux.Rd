@@ -4,7 +4,7 @@
 \alias{estimate_chla_flux}
 \title{Do the chl a flux calculations}
 \usage{
-estimate_chla_flux(depth, time, rabd660670, geoClass, smooth = TRUE)
+estimate_chla_flux(depth, time = NA, rabd660670, geoClass, smooth = TRUE)
 }
 \arguments{
 \item{depth}{depth in cm}
