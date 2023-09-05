@@ -13,7 +13,11 @@ Imports:
     dplyr,
     ggplot2,
     Hmisc,
-    lipdR,
     magrittr,
     tibble,
-    tidyr
+    tidyr,
+    lipdR
+Remotes: 
+    github::nickmckay/lipdR
+
+

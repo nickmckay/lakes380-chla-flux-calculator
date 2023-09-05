@@ -4,7 +4,7 @@
 \alias{estimate_sed_rate_from_median}
 \title{Simple sed rate estimation from a median time estimate and depth}
 \usage{
-estimate_sed_rate_from_median(time, depth, smooth = NA)
+estimate_sed_rate_from_median(time = NA, depth, smooth = NA)
 }
 \arguments{
 \item{time}{vector of age or year values}

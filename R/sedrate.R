@@ -6,10 +6,15 @@
 #'
 #' @return estimate sed rate
 #' @export
-estimate_sed_rate_from_median <- function(time, depth ,smooth = NA){
+estimate_sed_rate_from_median <- function(time = NA, depth ,smooth = NA){
   # time <- ts$age[[1]]
   # depth <- ts$depth[[1]]
 
+
+  if(all(is.na(time))){
+    warning("Time is empty")
+    return(rep(NA,times = length(depth)))
+  }
   #get change in time
   dt <- diff(time)
   dd <- diff(depth)
