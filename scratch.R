@@ -1,12 +1,19 @@
+library(lipdR)
+library(ggplot2)
 
 output_folder <- "~/Download"
 lakes <- c("LakeOporoa_17286.Lakes380.lpd","LakeWiritoa_18934.Lakes380.lpd")
 
 D <- readLipd(file.path("~/Dropbox/lipdverse/Lakes380National/",lakes))
 
-op <- estimate_chla_flux_lipd(D$LakeOporoa_17286.Lakes380)
+op <- estimate_chla_flux_lipd(D$LakeOporoa_17286.Lakes380,smooth = 0)
 
-op_plot <- plot_flux(op) + ggtitle("Oporoa")
+plot_flux(op) + ggtitle("Oporoa") + xlim(c(1900,2000))
+
+#or
+
+plot_flux(op) + ggtitle("Oporoa") + scale_x_continuous(breaks = seq(1000,2000,by = 100))
+
 
 op_data <- chla_flux_to_tibble(op)
 write_csv(x = op_data,file.path(output_folder,"OporoaData.csv"))

@@ -34,6 +34,9 @@ estimate_sed_rate_from_median <- function(time, depth ,smooth = NA){
 
   srOut <- Hmisc::approxExtrap(depth_mid,sr,xout = depth)$y
 
+  if(length(bad) > 0){
+    srOut[bad] <- NA
+  }
   return(srOut)
 
 }
