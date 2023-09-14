@@ -4,8 +4,8 @@ library(readr)
 library(Lakes380ChlaFluxCalculator)
 
 
-input_file <- "~/Downloads/POROA_LC4U_Data.xlsx"
-output_folder <- "~/Downloads"
+input_file <- "~/Download/WIRIT_LC3U_Data.xlsx"
+output_folder <- "~/Download"
 
 xl_hsi <- read_excel(input_file,sheet = "HSI")
 
@@ -39,15 +39,27 @@ agesOnHsiDepths <- Hmisc::approxExtrap(x = xl_chron$`z (dblf)`*10, #chronology d
 plot(agesOnHsiDepths,RABD660670$y)
 
 
-op <- estimate_chla_flux(depth = depth_mid,
+wirit <- estimate_chla_flux(depth = depth_mid,
                          time = agesOnHsiDepths,
                          rabd660670 = RABD660670$y,
-                         smooth = TRUE)
+                         smooth = TRUE,
+                         max.time = 400)
 
-op_plot <- plot_flux(op) + ggtitle("Oporoa from excel")
+alicePlot <- plot_flux(alice) + ggtitle("Alice from excel") + xlim(c(1600,2010))
 
-op_data <- chla_flux_to_tibble(op)
-write_csv(x = op_data,file.path(output_folder,"OporoaData.csv"))
+aliceOut <- chla_flux_to_tibble(alice)
+
+ggsave(alicePlot,filename = file.path(output_folder,"AliceFluxPlot.pdf"))
+
+write_csv(x = aliceOut,file.path(output_folder,"alice.csv"))
+
+wiritPlot <- plot_flux(wirit) + ggtitle("Wirit from excel")
+
+ggsave(wiritPlot,filename = file.path(output_folder,"WiritoaFluxPlot.pdf"))
+
+
+wiritOut <- chla_flux_to_tibble(wirit)
+write_csv(x = wiritOut,file.path(output_folder,"wirit.csv"))
 
 ggsave(op_plot,filename = file.path(output_folder,"OporoaFluxPlot.pdf"))
 

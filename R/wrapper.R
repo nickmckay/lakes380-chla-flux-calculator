@@ -37,18 +37,24 @@ estimate_chla_flux_lipd <- function(ts,smooth = TRUE){
 #' @return a tibble with output data
 #' @export
 #'
-estimate_chla_flux <- function(depth, time = NA, rabd660670, geoClass, smooth = TRUE){
+estimate_chla_flux <- function(depth, time = NA, rabd660670, geoClass, smooth = TRUE, max.time = NA){
+
+  if(is.na(max.time) | all(is.na(time))){
+    time.index <- seq_along(depth)
+  }else{
+    time.index <- which(time < max.time)
+  }
   #calculate sub-components
-  chla_conc <- calibrate_rabd660670(rabd660670,geoClass)
-  sed_rate <- estimate_sed_rate_from_median(time,depth,smooth = smooth)
-  dbd <- estimate_dbd(depth)
+  chla_conc <- calibrate_rabd660670(rabd660670[time.index],geoClass)
+  sed_rate <- estimate_sed_rate_from_median(time[time.index],depth[time.index],smooth = smooth)
+  dbd <- estimate_dbd(depth[time.index])
 
   #calculate fluc
   chla_flux <- chla_conc * sed_rate * dbd
 
   #add new columns to a tibble
-  mts <- tibble::tibble(time = list(time),
-                        depth = list(depth),
+  mts <- tibble::tibble(time = list(time[time.index]),
+                        depth = list(depth[time.index]),
                         chla_flux = list(chla_flux),
                         chla_conc = list(chla_conc),
                         sed_rate = list(sed_rate),
