@@ -1,10 +1,27 @@
 library(lipdR)
 library(ggplot2)
+library(readxl)
 
 output_folder <- "~/Download"
-lakes <- c("LakeOporoa_17286.Lakes380.lpd","LakeWiritoa_18934.Lakes380.lpd")
 
-D <- readLipd(file.path("~/Dropbox/lipdverse/Lakes380National/",lakes))
+D <- readLipd("~/Dropbox/lipdverse/Lakes380National/LakeWaihau_40590.Lakes380.lpd")
+
+D$paleoData[[3]]$measurementTable[[1]]$
+
+#get DBD data:
+dbdData <- read_excel("~/Download/Waihau_ICPMS_Cd_flux.xlsx")
+
+HSIData <- read_excel("~/Download/WAIHAU - HSI COMP TEST.xlsx",skip = 1)
+
+
+cmHsi <- bin(HSIData$dblf,HSIData$RABD660670,bin.vec = seq(0,484))
+names(cmHsi) <- c("Depth (cm)","RABD660670")
+cmHsi <- as.data.frame(cmHsi)
+
+dbdData$`Depth (cm)` <- as.numeric(dbdData$`Depth (cm)` )
+
+dbdData2 <- dplyr::left_join(dbdData,cmHsi)
+
 
 op <- estimate_chla_flux_lipd(D$LakeOporoa_17286.Lakes380,smooth = 0)
 
